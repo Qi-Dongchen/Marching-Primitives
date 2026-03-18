@@ -18,18 +18,15 @@ Examples:
     python compare_sq.py data/chair1_normalized_sq.csv --scan data/chair1_normalized.csv
 """
 
-import sys
 import os
 import argparse
 import numpy as np
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d.art3d import Poly3DCollection
 
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
-
-from Python.single_mesh_superquadrics import single_mesh_superquadrics
-from Python.mesh2tri import mesh2tri
-from Python.sdf_superquadric import sdf_superquadric
+from marching_primitives.single_mesh_superquadrics import single_mesh_superquadrics
+from marching_primitives.mesh2tri import mesh2tri
+from marching_primitives.sdf_superquadric import sdf_superquadric
 
 
 def load_sq_params(csv_file):
@@ -45,7 +42,7 @@ def load_scan(scan_path):
     ext = os.path.splitext(scan_path)[1].lower()
 
     if ext == '.ply':
-        from Python.plyread import plyread
+        from marching_primitives.plyread import plyread
         faces, verts = plyread(scan_path, 'tri')
         return 'mesh', (verts, faces)
 

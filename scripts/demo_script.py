@@ -9,7 +9,6 @@ Usage:
     python demo_script.py <path_to_sdf.csv> [--ply <path_to_watertight.ply>]
 """
 
-import sys
 import os
 import time
 import argparse
@@ -18,14 +17,11 @@ import matplotlib.pyplot as plt
 from matplotlib import colors
 from mpl_toolkits.mplot3d.art3d import Poly3DCollection
 
-# Add parent directory to path so we can import the Python package
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
-
-from Python.mps import MPS
-from Python.mesh_superquadrics import mesh_superquadrics
-from Python.mesh2tri import mesh2tri
-from Python.single_mesh_superquadrics import single_mesh_superquadrics
-from Python.plyread import plyread
+from marching_primitives.mps import MPS
+from marching_primitives.mesh_superquadrics import mesh_superquadrics
+from marching_primitives.mesh2tri import mesh2tri
+from marching_primitives.single_mesh_superquadrics import single_mesh_superquadrics
+from marching_primitives.plyread import plyread
 
 
 def reduce_mesh(faces, vertices, ratio=0.5):

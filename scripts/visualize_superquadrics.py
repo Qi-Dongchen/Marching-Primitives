@@ -10,7 +10,6 @@ from __future__ import annotations
 import argparse
 import glob
 import os
-import sys
 import tempfile
 from pathlib import Path
 
@@ -23,11 +22,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 
-PROJECT_ROOT = Path(__file__).resolve().parents[1]
-if str(PROJECT_ROOT) not in sys.path:
-    sys.path.insert(0, str(PROJECT_ROOT))
-
-from Python.single_mesh_superquadrics import single_mesh_superquadrics
+from marching_primitives.single_mesh_superquadrics import single_mesh_superquadrics
 
 
 def load_sq_csv(csv_path: Path) -> np.ndarray:
