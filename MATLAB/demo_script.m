@@ -96,6 +96,33 @@ grid off
 axis off
 title('superquadrics representation from marching primitives')
 
+% plot each superquadric in a different color
+n_sq = size(x, 1);
+cmap = lines(n_sq);
+figure(4)
+hold on
+for i = 1 : n_sq
+    [x_mesh, y_mesh, z_mesh] = singleMeshSuperquadrics(x(i, :), ...
+        'Arclength', voxelGrid.visualizeArclength, 'Taper', false);
+    [fi, vi] = mesh2tri(x_mesh, y_mesh, z_mesh, 'f');
+    s = size(fi, 1);
+    idx = cat(2, s / 8 : 3 * s / 8, 5 * s / 8 : 7 * s / 8);
+    fi = fi(idx, :);
+    trisurf(fi, vi(:,1), vi(:,2), vi(:,3), ...
+        'FaceColor', cmap(i, :), 'FaceAlpha', 1, 'EdgeColor', 'none')
+end
+hold off
+axis equal
+view(view_vector)
+camroll(camera_roll)
+light
+lightangle(light_vector(1), light_vector(2))
+material dull
+axis(voxelGrid.range)
+grid off
+axis off
+title('superquadrics (per-primitive coloring)')
+
 figure(3)
 trisurf(mesh_gt.f,mesh_gt.v(:,1),mesh_gt.v(:,2),mesh_gt.v(:,3), ...
     'FaceColor', 'g', 'FaceAlpha', 0.5, 'EdgeColor', 'none')
