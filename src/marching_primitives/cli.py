@@ -51,8 +51,8 @@ def main():
         pathname = os.path.dirname(args.csv_file)
         name = os.path.splitext(os.path.basename(args.csv_file))[0]
 
-        np.savez(os.path.join(pathname, f"{name}_sq.npz"), x=x.astype(np.float32))
-        save_stl(os.path.join(pathname, f"{name}_sq.stl"), mesh_faces, mesh_vertices)
+        np.savez(os.path.join(pathname, f"{name}_sq_py.npz"), x=x.astype(np.float32))
+        save_stl(os.path.join(pathname, f"{name}_sq_py.stl"), mesh_faces, mesh_vertices)
         np.savetxt(
             os.path.join(pathname, f"{name}_sq.csv"), x, delimiter=',',
             header='eps1,eps2,ax,ay,az,eul_z,eul_y,eul_x,tx,ty,tz', comments='',
