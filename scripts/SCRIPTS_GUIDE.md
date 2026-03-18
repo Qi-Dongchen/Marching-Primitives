@@ -5,9 +5,7 @@ This folder contains Python scripts for converting meshes to Signed Distance Fie
 ## Prerequisites
 
 ```bash
-pip install numpy trimesh mesh2sdf matplotlib scikit-image
-# Optional (for mesh decimation): pip install pymeshlab or open3d
-# Optional (for STL loading in compare_sq): pip install numpy-stl
+pip install numpy trimesh matplotlib scikit-image open3d
 ```
 
 ---
@@ -16,25 +14,13 @@ pip install numpy trimesh mesh2sdf matplotlib scikit-image
 
 Convert a single mesh file (OBJ, STL, PLY, etc.) to a watertight mesh and SDF.
 
-```bash
-# Basic usage (outputs original-scale SDF and watertight mesh)
-python scripts/mesh2sdf_convert.py path/to/model.obj
-
-# With normalization (SDF in [-1, 1] range)
-python scripts/mesh2sdf_convert.py path/to/model.obj --normalize
-
-# Custom grid resolution and thicken level
-python scripts/mesh2sdf_convert.py path/to/model.obj --grid_resolution 64 --level 3.0
 ```
-
-**Arguments:**
-
-| Argument | Type | Default | Description |
-|---|---|---|---|
-| `path_to_data` | positional | — | Path to the input mesh file |
-| `--grid_resolution` | int | 100 | Voxel grid resolution (e.g., 100 = 100^3) |
-| `--level` | float | 2.0 | Watertight thicken level |
-| `--normalize` | flag | off | Output normalized mesh and SDF in [-1, 1] |
+pip install mesh2sdf
+```
+Then simply run
+```
+python3 mesh2sdf_convert.py path/to/model.obj --normalize --grid_resolution 100
+```
 
 **Output** (saved in a subfolder named after the input file):
 - `<name>_watertight.ply` / `<name>_watertight.stl` — watertight mesh
@@ -51,7 +37,7 @@ Batch process all OBJ files in a directory using `mesh2sdf_convert.py`.
 python scripts/batch_mesh2sdf_convert.py --data_dir data
 
 # With options
-python scripts/batch_mesh2sdf_convert.py --data_dir data --grid_resolution 64 --level 2.0 --normalize
+python scripts/batch_mesh2sdf_convert.py --data_dir data --grid_resolution 100 --normalize
 ```
 
 **Arguments:**
@@ -60,7 +46,6 @@ python scripts/batch_mesh2sdf_convert.py --data_dir data --grid_resolution 64 --
 |---|---|---|---|
 | `--data_dir` | str | `data` | Directory containing `.obj` files |
 | `--grid_resolution` | int | 100 | Voxel grid resolution |
-| `--level` | float | 2.0 | Watertight thicken level |
 | `--normalize` | flag | off | Enable normalization |
 
 ---
