@@ -2,9 +2,9 @@
 Compare MATLAB and Python superquadric fitting results against ground-truth SDF.
 
 Usage:
-    python scripts/compare_matlab_python.py                      # all chairs
-    python scripts/compare_matlab_python.py --chairs chair2      # single chair
-    python scripts/compare_matlab_python.py --chairs chair2 chair5 --plot
+    python scripts/compare_matlab_python.py data/              # all objects in data/
+    python scripts/compare_matlab_python.py data/ --names chair2      # single object
+    python scripts/compare_matlab_python.py data/ --names chair2 chair5 --plot
 """
 
 import argparse
@@ -107,9 +107,9 @@ def print_metrics(name, metrics, indent=2):
             print(f"{prefix}  {k:25s} = {v}")
 
 
-def compare_one_chair(chair_name, data_dir, do_plot=False):
-    """Run full comparison for one chair."""
-    base = os.path.join(data_dir, chair_name, f'{chair_name}_normalized')
+def compare_one_object(obj_name, data_dir, do_plot=False):
+    """Run full comparison for one object."""
+    base = os.path.join(data_dir, obj_name, f'{obj_name}_normalized')
     gt_csv = base + '.csv'
     py_csv = base + '_sq.csv'
     mat_file = base + '_sq.mat'
@@ -119,11 +119,11 @@ def compare_one_chair(chair_name, data_dir, do_plot=False):
         if not os.path.exists(f):
             missing.append(f'{label} ({f})')
     if missing:
-        print(f"\n=== {chair_name} === SKIPPED (missing: {', '.join(missing)})")
+        print(f"\n=== {obj_name} === SKIPPED (missing: {', '.join(missing)})")
         return None
 
     print(f"\n{'=' * 60}")
-    print(f"  {chair_name}")
+    print(f"  {obj_name}")
     print(f"{'=' * 60}")
 
     # Load data
@@ -166,10 +166,10 @@ def compare_one_chair(chair_name, data_dir, do_plot=False):
         print(f"    {c:8s}: {mv:10.5f} | {pv:10.5f}  (diff={diff:.5f})")
 
     if do_plot:
-        plot_comparison(chair_name, sdf_gt, sdf_matlab, sdf_python, res, points)
+        plot_comparison(obj_name, sdf_gt, sdf_matlab, sdf_python, res, points, data_dir)
 
     return {
-        'chair': chair_name,
+        'name': obj_name,
         'n_matlab': pinfo['n_matlab'],
         'n_python': pinfo['n_python'],
         'matlab_vs_gt': m_matlab_gt,
@@ -178,7 +178,7 @@ def compare_one_chair(chair_name, data_dir, do_plot=False):
     }
 
 
-def plot_comparison(chair_name, sdf_gt, sdf_matlab, sdf_python, res, points):
+def plot_comparison(obj_name, sdf_gt, sdf_matlab, sdf_python, res, points, data_dir):
     """Generate comparison plots."""
     import matplotlib.pyplot as plt
 
@@ -189,7 +189,7 @@ def plot_comparison(chair_name, sdf_gt, sdf_matlab, sdf_python, res, points):
     py_3d = sdf_python.reshape(res, res, res)
 
     fig, axes = plt.subplots(2, 3, figsize=(15, 10))
-    fig.suptitle(f'{chair_name} - SDF comparison (z=0 slice)', fontsize=14)
+    fig.suptitle(f'{obj_name} - SDF comparison (z=0 slice)', fontsize=14)
 
     vmin, vmax = -0.3, 0.3
 
@@ -217,14 +217,14 @@ def plot_comparison(chair_name, sdf_gt, sdf_matlab, sdf_python, res, points):
     fig.colorbar(im, ax=axes[1, :], shrink=0.6, label='Absolute Error')
     plt.tight_layout()
 
-    out_path = f'data/{chair_name}/{chair_name}_comparison.png'
+    out_path = os.path.join(data_dir, obj_name, f'{obj_name}_comparison.png')
     plt.savefig(out_path, dpi=150, bbox_inches='tight')
     print(f"  Plot saved to {out_path}")
     plt.close()
 
 
 def print_summary_table(results):
-    """Print a summary table across all chairs."""
+    """Print a summary table across all objects."""
     results = [r for r in results if r is not None]
     if not results:
         return
@@ -232,7 +232,7 @@ def print_summary_table(results):
     print(f"\n{'=' * 80}")
     print("  SUMMARY TABLE")
     print(f"{'=' * 80}")
-    header = (f"  {'Chair':12s} | {'#Mat':>4s} {'#Py':>4s} | "
+    header = (f"  {'Name':12s} | {'#Mat':>4s} {'#Py':>4s} | "
               f"{'MAT RMSE':>9s} {'PY RMSE':>9s} | "
               f"{'MAT IoU':>8s} {'PY IoU':>8s} | "
               f"{'M-P RMSE':>9s}")
@@ -243,7 +243,7 @@ def print_summary_table(results):
         mg = r['matlab_vs_gt']
         pg = r['python_vs_gt']
         mp = r['matlab_vs_python']
-        print(f"  {r['chair']:12s} | {r['n_matlab']:4d} {r['n_python']:4d} | "
+        print(f"  {r['name']:12s} | {r['n_matlab']:4d} {r['n_python']:4d} | "
               f"{mg['rmse']:9.6f} {pg['rmse']:9.6f} | "
               f"{mg['volume_iou']:8.4f} {pg['volume_iou']:8.4f} | "
               f"{mp['rmse']:9.6f}")
@@ -263,29 +263,29 @@ def print_summary_table(results):
 
 def main():
     parser = argparse.ArgumentParser(description='Compare MATLAB vs Python superquadric results')
-    parser.add_argument('--chairs', nargs='+', default=None,
-                        help='Chair names to compare (e.g., chair2 chair5). Default: all.')
+    parser.add_argument('data_dir', help='Path to data directory')
+    parser.add_argument('--names', nargs='+', default=None,
+                        help='Object names to compare (e.g., chair2 table1). Default: all.')
     parser.add_argument('--plot', action='store_true', help='Generate comparison plots')
-    parser.add_argument('--data-dir', default='data', help='Path to data directory')
     args = parser.parse_args()
 
-    if args.chairs is None:
-        # Auto-detect all chairs that have both .mat and _sq.csv
-        pattern = os.path.join(args.data_dir, 'chair*', '*_normalized_sq.mat')
+    if args.names is None:
+        # Auto-detect all objects that have both _sq.mat and _sq.csv
+        pattern = os.path.join(args.data_dir, '*', '*_normalized_sq.mat')
         mat_files = sorted(glob.glob(pattern))
-        chairs = [os.path.basename(os.path.dirname(f)) for f in mat_files]
+        names = [os.path.basename(os.path.dirname(f)) for f in mat_files]
     else:
-        chairs = args.chairs
+        names = args.names
 
-    if not chairs:
-        print("No chairs found to compare.")
+    if not names:
+        print("No objects found to compare.")
         return
 
-    print(f"Comparing {len(chairs)} chair(s): {', '.join(chairs)}")
+    print(f"Comparing {len(names)} object(s): {', '.join(names)}")
 
     results = []
-    for chair in chairs:
-        r = compare_one_chair(chair, args.data_dir, do_plot=args.plot)
+    for name in names:
+        r = compare_one_object(name, args.data_dir, do_plot=args.plot)
         results.append(r)
 
     print_summary_table(results)

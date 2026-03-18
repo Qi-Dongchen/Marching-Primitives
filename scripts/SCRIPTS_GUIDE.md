@@ -19,7 +19,7 @@ pip install mesh2sdf
 ```
 Then simply run
 ```
-python3 mesh2sdf_convert.py path/to/model.obj --normalize --grid_resolution 100
+python mesh2sdf_convert.py path/to/model.obj --normalize --grid_resolution 100
 ```
 
 **Output** (saved in a subfolder named after the input file):
@@ -224,3 +224,37 @@ python scripts/visualize_superquadrics.py --output-dir results/images --dpi 300 
    compare_sq.py  (compare superquadrics vs ground truth)
    visualize_superquadrics.py  (batch render to PNG)
 ```
+
+## 8. Difference between MATLAB version and Python version
+
+In example folder
+|  Name         | #Mat  #Py |  MAT RMSE   PY RMSE |  MAT IoU   PY IoU |  M-P RMSE  |
+|  crab_mc      |   49   50 |  0.167250  0.167306 |   0.2474   0.2466 |  0.004092  |
+|  crab_mps     |   45   46 |  0.166463  0.166099 |   0.2465   0.2476 |  0.006150  |
+|  hind_attack_helicopter_mc |   35   38 |  0.135225  0.135748 |   0.1449   0.1455 |  0.009043  |
+|  hind_attack_helicopter_mps |   28   28 |  0.141775  0.139141 |   0.1426   0.1413 |  0.013172  |
+|  model_of_a_boat__ncma_explore_mc |   70   67 |  0.222539  0.218818 |   0.1021   0.1023 |  0.034843  |
+|  model_of_a_boat__ncma_explore_mps |   71   69 |  0.218630  0.216195 |   0.1016   0.1022 |  0.026821  |
+|  model_of_a_boat__ncma_explore_v2_normalized_watertight |   70   67 |  0.222539  0.218818 |   0.1021   0.1023 |  0.034843  |
+|  octpus_mc    |   61   66 |  0.107034  0.106641 |   0.3321   0.3339 |  0.007110  |
+|  octpus_mps   |   64   61 |  0.110310  0.109912 |   0.3179   0.3170 |  0.006333  |
+|  sculpture_mc |   86  135 |  0.228809  0.218657 |   0.1873   0.1911 |  0.051253  |
+|  sculpture_mps |   75   73 |  0.229701  0.219506 |   0.1963   0.1977 |  0.052946  |
+|  sleek_modern_dining_table_set_mc |   61   63 |  0.107445  0.105558 |   0.2852   0.2859 |  0.017874  |
+|  sleek_modern_dining_table_set_mps |   59   64 |  0.107626  0.106886 |   0.2886   0.2886 |  0.020532  |
+|  terataner_balrog_mc |   34   36 |  0.140281  0.140605 |   0.1260   0.1217 |  0.003958  |
+|  terataner_balrog_mps |   36   36 |  0.141660  0.142006 |   0.1234   0.1234 |  0.004661  |
+|  AVERAGE      |           |  0.163152  0.160793 |   0.1963   0.1965 |  0.019575  |
+
+In data folder (chairs)
+|  Name         | #Mat  #Py |  MAT RMSE   PY RMSE |  MAT IoU   PY IoU |  M-P RMSE  |
+|  chair1       |    6    6 |  0.258723  0.231910 |   0.4503   0.4528 |  0.085715  |
+|  chair10      |   27   25 |  0.181301  0.173899 |   0.4879   0.4869 |  0.018053  |
+|  chair11      |   98  106 |  0.195202  0.193312 |   0.0932   0.0934 |  0.028430  |
+|  chair2       |   22   22 |  0.200452  0.199881 |   0.2903   0.2906 |  0.052458  |
+|  chair4       |   42   41 |  0.149312  0.139465 |   0.1307   0.1296 |  0.058784  |
+|  chair5       |   21   23 |  0.182158  0.135228 |   0.3493   0.3509 |  0.104290  |
+|  chair6       |   14   17 |  0.152956  0.126496 |   0.7160   0.7136 |  0.056170  |
+|  chair8       |  118  154 |  0.265801  0.264652 |   0.0525   0.0517 |  0.040609  |
+|  chair9       |   20   24 |  0.167114  0.166236 |   0.2226   0.2238 |  0.027678  |
+|  AVERAGE      |           |  0.194780  0.181231 |   0.3103   0.3104 |  0.052465  |

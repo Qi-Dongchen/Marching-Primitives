@@ -36,13 +36,16 @@ def main() -> int:
     converter_script = script_dir / "mesh2sdf_convert.py"
     data_dir = Path(args.data_dir).resolve()
 
-    obj_files = sorted(data_dir.glob("*.obj"))
-    if not obj_files:
-        print(f"No .obj files found in {data_dir}")
+    mesh_extensions = ("*.obj", "*.stl", "*.ply", "*.off", "*.glb", "*.gltf", "*.dae")
+    mesh_files = sorted(
+        f for ext in mesh_extensions for f in data_dir.glob(ext)
+    )
+    if not mesh_files:
+        print(f"No mesh files found in {data_dir}")
         return 0
 
     failed = []
-    for obj_file in obj_files:
+    for obj_file in mesh_files:
         cmd = [
             sys.executable,
             str(converter_script),
@@ -67,7 +70,7 @@ def main() -> int:
             print(f"- {f}")
         return 1
 
-    print(f"\nDone. Processed {len(obj_files)} OBJ files.")
+    print(f"\nDone. Processed {len(mesh_files)} mesh files.")
     return 0
 
 

@@ -66,7 +66,7 @@ def main():
         ax.set_title(title)
 
     fig, ax = plt.subplots(subplot_kw={'projection': '3d'}, figsize=(8, 6))
-    cmap = plt.cm.get_cmap('tab20', x.shape[0])
+    cmap = plt.get_cmap('tab20', x.shape[0])
     for i in range(x.shape[0]):
         xm, ym, zm = single_mesh_superquadrics(x[i], arclength=visualize_arclength, taper=False)
         f_i, v_i = mesh2tri(xm, ym, zm, 'f')

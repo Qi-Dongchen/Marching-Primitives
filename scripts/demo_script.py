@@ -192,7 +192,7 @@ def main():
     # Figure 2: Superquadric mesh with different colors per primitive
     fig2 = plt.figure(figsize=(8, 6))
     ax2 = fig2.add_subplot(111, projection='3d')
-    cmap = plt.cm.get_cmap('tab20', x.shape[0])
+    cmap = plt.get_cmap('tab20', x.shape[0])
     for i in range(x.shape[0]):
         x_mesh, y_mesh, z_mesh = single_mesh_superquadrics(
             x[i], arclength=visualize_arclength, taper=False

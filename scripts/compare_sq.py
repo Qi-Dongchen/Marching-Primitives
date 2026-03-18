@@ -106,7 +106,7 @@ def main():
     print(f"Loaded {x.shape[0]} superquadrics from {args.sq_csv}")
 
     # Mesh each superquadric
-    cmap = plt.cm.get_cmap('tab20', x.shape[0])
+    cmap = plt.get_cmap('tab20', x.shape[0])
 
     fig = plt.figure(figsize=(12, 8))
     ax = fig.add_subplot(111, projection='3d')
