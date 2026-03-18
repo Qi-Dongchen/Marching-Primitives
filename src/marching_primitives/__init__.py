@@ -13,6 +13,7 @@ from .mesh2tri import mesh2tri
 from .show_superquadrics import show_tsdf, show_superquadrics, show_multi_superquadrics
 from .plyread import plyread
 from .read_obj import read_obj
+from .utils import load_sdf_csv, reduce_mesh, save_stl
 
 __all__ = [
     'MPS',
@@ -28,4 +29,7 @@ __all__ = [
     'show_multi_superquadrics',
     'plyread',
     'read_obj',
+    'load_sdf_csv',
+    'reduce_mesh',
+    'save_stl',
 ]
