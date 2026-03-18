@@ -146,4 +146,19 @@ python scripts/main.py data/chair1/chair1_normalized.csv --no-save
 
 ## Difference between MATLAB version and Python version
 
-The Python results may differ from the MATLAB results, shown in a different number of reconstructed superquadrics; however, the overall effect does not differ significantly.
+Primitive counts may differ. But overall performence should be close.
+
+|  Name         | #Mat  #Py |  MAT RMSE   PY RMSE |  MAT IoU   PY IoU |  M-P RMSE  |
+|---|---|---|---|---|
+|  chair1       |    6    6 |  0.258723  0.231910 |   0.4503   0.4528 |  0.085715  |
+|  chair10      |   27   25 |  0.181301  0.173899 |   0.4879   0.4869 |  0.018053  |
+|  chair11      |   98  106 |  0.195202  0.193312 |   0.0932   0.0934 |  0.028430  |
+|  chair2       |   22   22 |  0.200452  0.199881 |   0.2903   0.2906 |  0.052458  |
+|  chair3       |   19   20 |  0.224089  0.203865 |   0.0219   0.0218 |  0.073007  |
+|  chair4       |   42   41 |  0.149312  0.139465 |   0.1307   0.1296 |  0.058784  |
+|  chair5       |   21   23 |  0.182158  0.135228 |   0.3493   0.3509 |  0.104290  |
+|  chair6       |   14   17 |  0.152956  0.126496 |   0.7160   0.7136 |  0.056170  |
+|  chair7       |   41   42 |  0.165504  0.160366 |   0.0963   0.0953 |  0.035757  |
+|  chair8       |  118  154 |  0.265801  0.264652 |   0.0525   0.0517 |  0.040609  |
+|  chair9       |   20   24 |  0.167114  0.166236 |   0.2226   0.2238 |  0.027678  |
+|  AVERAGE      |           |  0.194783  0.181392 |   0.2646   0.2646 |  0.052814  |

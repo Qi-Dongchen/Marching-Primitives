@@ -111,7 +111,7 @@ def compare_one_object(obj_name, data_dir, do_plot=False):
     """Run full comparison for one object."""
     base = os.path.join(data_dir, obj_name, f'{obj_name}_normalized')
     gt_csv = base + '.csv'
-    py_csv = base + '_sq.csv'
+    py_csv = base + '_sq_py.csv'
     mat_file = base + '_sq.mat'
 
     missing = []

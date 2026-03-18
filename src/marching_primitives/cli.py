@@ -54,7 +54,7 @@ def main():
         np.savez(os.path.join(pathname, f"{name}_sq_py.npz"), x=x.astype(np.float32))
         save_stl(os.path.join(pathname, f"{name}_sq_py.stl"), mesh_faces, mesh_vertices)
         np.savetxt(
-            os.path.join(pathname, f"{name}_sq.csv"), x, delimiter=',',
+            os.path.join(pathname, f"{name}_sq_py.csv"), x, delimiter=',',
             header='eps1,eps2,ax,ay,az,eul_z,eul_y,eul_x,tx,ty,tz', comments='',
         )
 
