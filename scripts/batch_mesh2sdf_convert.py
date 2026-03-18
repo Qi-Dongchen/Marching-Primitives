@@ -6,12 +6,11 @@ from pathlib import Path
 
 def main() -> int:
     parser = argparse.ArgumentParser(
-        description="Batch process OBJ files in a data folder with mesh2sdf_convert.py."
+        description="Batch process mesh files in a data folder with mesh2sdf_convert.py."
     )
     parser.add_argument(
         "--data_dir",
-        default="data",
-        help="Directory containing .obj files (default: data).",
+        help="Directory containing mesh files (default: data).",
     )
     parser.add_argument(
         "--grid_resolution",

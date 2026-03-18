@@ -31,7 +31,7 @@ Representing complex objects with basic geometric primitives has long been a top
 
 ## Implementation
 ### Marching-Primitives algorithm
-The source code of the algorithm is in `/MATLAB/src/MPS.m`
+The source code of the algorithm is in `src/marching_primitives`
 ```
 x = MPS(sdf, grid)
 ```
@@ -42,24 +42,108 @@ The algorithm requires a Signed Distance Function discretized on a voxel grid as
 The output of the function is a 2D array of size $K*11$, where each row stores the parameter of a superquadric $[\epsilon_1, \epsilon_2, a_x, a_y, a_z, euler_z, euler_y, euler_x, t_x, t_y, t_z]$.
 
 ### Preparing SDF from meshes
-If you do not have SDF files but want to test the algorithm, we have a simple script [mesh2sdf_preparation](/mesh2sdf_preparation) to generate SDF from meshes. The script is based on this [package](https://github.com/wang-ps/mesh2sdf).
+If you do not have SDF files but want to test the algorithm, we provide Python scripts to generate SDF from meshes. The scripts are based on the [mesh2sdf](https://github.com/wang-ps/mesh2sdf) package.
 The mesh file will be first transformed to be watertight so that a valid SDF can be extracted.
-To run the script, first install dependency
-```
-pip install mesh2sdf
-```
-Then simply run
-```
-python3 mesh2sdf_convert.py $location of the mesh file$ --normalize --grid_resolution 100
-```
-where the mesh and sdf will be normalized within $[-1, 1]$ if you add `–-normalized`; and `--grid_resolution` specifies the resolution of the sdf (default $100$).
-The script accepts mesh forms: .stl, .off, .ply, .collada, .json, .dict, .glb, .dict64, .msgpack, .obj.
-The SDF (*.csv) and preprocessed watertight mesh (*_watertight.stl) will be saved at the same folder of the input mesh.
-A few meshes from ShapeNet/ModelNet are prepared in the [data](/MATLAB/data) at `/MATALB/data`.
 
-### Demo script
-After obtaining the SDF file, run the [demo script](/MATLAB/demo_script.m) at `/MATLAB/demo_script.m`.
-The script conducts the shape abstraction and visualize the results.
-The recovered superquadric representation is saved as `*.mat` at the same location of the input SDF.
-For visualization, mesh file of the superquadric representation is also saved as `*_sq.stl`.
+Install the dependency:
+```
+pip install mesh2sdf trimesh
+```
 
+**Single file** — convert a mesh (OBJ, STL, PLY, etc.) to a watertight mesh and SDF:
+```bash
+python scripts/mesh2sdf_convert.py path/to/mesh --normalize --grid_resolution 100
+```
+
+**Batch** — process all mesh files in a directory:
+```bash
+python scripts/batch_mesh2sdf_convert.py --data_dir data --grid_resolution 100 --normalize
+```
+
+Options: `--normalize` normalizes the mesh and SDF within $[-1, 1]$; `--grid_resolution` specifies the voxel grid resolution (default $100$); `--level` sets the watertight thicken level (default $2.0$, GLB only).
+The scripts accept: .stl, .off, .ply, .collada, .json, .dict, .glb, .dict64, .msgpack, .obj.
+
+**Output** (saved in a subfolder named after the input file):
+- `<name>_watertight.ply` / `<name>_watertight.stl` — watertight mesh
+- `<name>.csv` — SDF as CSV
+
+A few meshes from ShapeNet/ModelNet are prepared in the [data](/data).
+
+# Python Scripts Guide
+
+## Installation
+
+```bash
+# Install the marching-primitives package (from repo root)
+pip install -e .
+
+# Install additional dependencies for mesh conversion scripts
+pip install mesh2sdf trimesh
+
+# Optional: for comparison and advanced visualization
+pip install scipy scikit-image open3d
+```
+
+After installation, the `marching-primitives` CLI command becomes available:
+```bash
+marching-primitives data/chair1/chair1_normalized.csv --ply data/chair1/chair1_normalized_watertight.ply
+```
+
+## Scripts
+
+### main.py
+
+Run the Marching-Primitives (MPS) algorithm on an SDF to extract superquadric primitives, then visualize the results.
+
+```bash
+# Basic usage
+python scripts/main.py data/chair1/chair1_normalized.csv
+
+# With ground-truth PLY overlay
+python scripts/main.py data/chair1/chair1_normalized.csv --ply data/chair1/chair1_normalized_watertight.ply
+
+# Save outputs without displaying plots
+python scripts/main.py data/chair1/chair1_normalized.csv --no-display
+
+# Skip saving output files
+python scripts/main.py data/chair1/chair1_normalized.csv --no-save
+```
+
+**Arguments:**
+
+| Argument | Type | Default | Description |
+|---|---|---|---|
+| `csv_file` | positional | — | Path to the SDF `.csv` file |
+| `--ply` | str | None | Path to watertight `.ply` file for ground-truth comparison |
+| `--no-save` | flag | off | Do not save output files |
+| `--no-display` | flag | off | Do not display plots |
+
+**Output** (saved alongside the input CSV):
+- `<name>_sq_py.npz` — superquadric parameters (NumPy format)
+- `<name>_sq_py.csv` — superquadric parameters (CSV, 11 columns: eps1, eps2, ax, ay, az, eul_z, eul_y, eul_x, tx, ty, tz)
+- `<name>_sq_py.stl` — reconstructed mesh from superquadrics
+
+---
+
+## Typical Workflow
+
+```
+1. Convert mesh to SDF:
+   mesh2sdf_convert.py  (single OBJ/STL/PLY)
+   batch_mesh2sdf_convert.py  (batch OBJ)
+   glb2sdf_convert.py  (single or batch GLB)
+         |
+         v
+2. Run Marching-Primitives:
+   main.py  (extract superquadrics from SDF)
+         |
+         v
+3. Visualize / Compare:
+   visualize_sdf.py  (inspect the SDF)
+   compare_sq.py  (compare superquadrics vs ground truth)
+   visualize_superquadrics.py  (batch render to PNG)
+```
+
+## Difference between MATLAB version and Python version
+
+The Python results may differ from the MATLAB results, shown in a different number of reconstructed superquadrics; however, the overall effect does not differ significantly.
