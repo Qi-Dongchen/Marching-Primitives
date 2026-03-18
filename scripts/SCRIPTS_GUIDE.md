@@ -250,7 +250,7 @@ In example folder
 ---
 
 In data folder (chairs)
-|  Name         | #Mat  #Py |  MAT RMSE   PY RMSE |  MAT IoU   PY IoU |  M-P RMSE  |
+|  Name         | #Mat | #Py | MAT RMSE | PY RMSE | MAT IoU | PY IoU | M-P RMSE |
 |---|---|---|---|---|---|---|---|
 |  chair1       | 6 | 6 |  0.258723 | 0.231910 | 0.4503 | 0.4528 | 0.085715 |
 |  chair10      | 27 | 25 | 0.181301 | 0.173899 | 0.4879 | 0.4869 | 0.018053 |
