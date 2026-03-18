@@ -229,6 +229,7 @@ python scripts/visualize_superquadrics.py --output-dir results/images --dpi 300 
 
 In example folder
 |  Name         | #Mat  #Py |  MAT RMSE   PY RMSE |  MAT IoU   PY IoU |  M-P RMSE  |
+|---|---|---|---|---|
 |  crab_mc      |   49   50 |  0.167250  0.167306 |   0.2474   0.2466 |  0.004092  |
 |  crab_mps     |   45   46 |  0.166463  0.166099 |   0.2465   0.2476 |  0.006150  |
 |  hind_attack_helicopter_mc |   35   38 |  0.135225  0.135748 |   0.1449   0.1455 |  0.009043  |
@@ -246,8 +247,11 @@ In example folder
 |  terataner_balrog_mps |   36   36 |  0.141660  0.142006 |   0.1234   0.1234 |  0.004661  |
 |  AVERAGE      |           |  0.163152  0.160793 |   0.1963   0.1965 |  0.019575  |
 
+---
+
 In data folder (chairs)
 |  Name         | #Mat  #Py |  MAT RMSE   PY RMSE |  MAT IoU   PY IoU |  M-P RMSE  |
+|---|---|---|---|---|
 |  chair1       |    6    6 |  0.258723  0.231910 |   0.4503   0.4528 |  0.085715  |
 |  chair10      |   27   25 |  0.181301  0.173899 |   0.4879   0.4869 |  0.018053  |
 |  chair11      |   98  106 |  0.195202  0.193312 |   0.0932   0.0934 |  0.028430  |
@@ -258,3 +262,5 @@ In data folder (chairs)
 |  chair8       |  118  154 |  0.265801  0.264652 |   0.0525   0.0517 |  0.040609  |
 |  chair9       |   20   24 |  0.167114  0.166236 |   0.2226   0.2238 |  0.027678  |
 |  AVERAGE      |           |  0.194780  0.181231 |   0.3103   0.3104 |  0.052465  |
+
+---
